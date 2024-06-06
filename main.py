@@ -1,9 +1,7 @@
-from pessoa import Pessoa
-from cliente import Cliente
-from endereco import Endereco
+from menu import Menu
 
 def main():
-    endereco = Endereco('29146040')
+    menu = Menu()
 
 if __name__ == "__main__":
     main()

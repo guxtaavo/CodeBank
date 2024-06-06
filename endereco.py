@@ -1,10 +1,10 @@
 import requests
 
 class Endereco():
-    def __init__(self, cep: str, numero: str) -> None:
+    def __init__(self, cep: str) -> None:
         self.cep = None
         self.endereco = None
-        self.numero = numero
+        # self.numero = numero
         self.bairro = None
         self.cidade = None
         self.estado = None
@@ -23,7 +23,7 @@ class Endereco():
                 self.cidade = dados['localidade']
                 self.estado = dados['uf']
             else:
-                print(f'Erro no status code')
+                print(f'Erro ao encontrar o cep')
         except Exception as e:
             print(f'Erro inesperado: [{e}]')
 
@@ -32,6 +32,7 @@ class Endereco():
             ... # CRIAR A DB SE NAO EXISTIR
             ... # SAVE
 
-
     def __str__(self) -> str:
-        pass
+        return (
+            f'{self.endereco} | {self.bairro} | {self.cidade} | {self.estado}'
+        )
