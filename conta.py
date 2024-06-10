@@ -11,7 +11,7 @@ class Conta:
         else:
             raise ValueError("Email inválido")
         if Conta._validar_senha(senha):
-            self.senha = senha
+            self._senha = senha
         else:
             raise ValueError("Senha inválida")
         self.id_conta = self._criar_id_conta()

@@ -3,8 +3,7 @@ import requests
 class Endereco():
     def __init__(self, cep: str) -> None:
         self.cep = None
-        self.endereco = None
-        # self.numero = numero
+        self.rua = None
         self.bairro = None
         self.cidade = None
         self.estado = None
@@ -18,7 +17,7 @@ class Endereco():
             if r.status_code == 200:
                 dados = r.json()
                 self.cep = dados['cep']
-                self.endereco = dados['logradouro']
+                self.rua = dados['logradouro']
                 self.bairro = dados['bairro']
                 self.cidade = dados['localidade']
                 self.estado = dados['uf']
@@ -28,11 +27,11 @@ class Endereco():
             print(f'Erro inesperado: [{e}]')
 
     def _save_to_db(self):
-        if self.endereco is not None:
+        if self.rua is not None:
             ... # CRIAR A DB SE NAO EXISTIR
             ... # SAVE
 
     def __str__(self) -> str:
         return (
-            f'{self.endereco} | {self.bairro} | {self.cidade} | {self.estado}'
+            f'{self.rua} | {self.bairro} | {self.cidade} | {self.estado}'
         )

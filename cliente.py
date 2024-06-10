@@ -8,7 +8,7 @@ class Cliente():
         self.pessoa = pessoa
         self.endereco = endereco
         self.conta = conta
-
+        
     def depositar(self, valor) -> None:
         if valor >= 0:
             self.conta.depositar(valor)
