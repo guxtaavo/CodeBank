@@ -3,7 +3,8 @@ import re
 from datetime import datetime
 
 class Conta:
-    def __init__(self, email: str, senha: str) -> None:
+    def __init__(self, email: str, senha: str, id_conta: int | None,
+                  data_criacao: str | None) -> None:
         self._saldo = 0
         self._credito = 0
         if Conta._validar_email(email):
@@ -14,8 +15,10 @@ class Conta:
             self._senha = senha
         else:
             raise ValueError("Senha inválida")
-        self.id_conta = self._criar_id_conta()
-        self.data_criacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.id_conta = id_conta if id_conta is not None\
+            else self._criar_id_conta()
+        self.data_criacao = data_criacao if data_criacao is not None\
+              else datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     @staticmethod
     def _validar_senha(senha: str) -> bool:

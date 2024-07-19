@@ -3,9 +3,10 @@ from cliente import Cliente
 from pessoa import Pessoa
 from endereco import Endereco
 from conta import Conta
+from pathlib import Path
 
 class DatabaseManager:
-    def __init__(self, path: str):
+    def __init__(self, path: Path):
         self.path = path
 
     # Criar todas as tabelas
@@ -188,3 +189,82 @@ class DatabaseManager:
         )
         con.commit()
         con.close()
+
+    def get_client_id(self, identifier: str, password: str) -> str | None:
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT id, cpf
+            FROM Clientes
+            WHERE cpf = ?
+            """, (identifier,)
+        )
+        result = cursor.fetchone()
+        print(result)
+        con.close()
+        return result[0]
+    
+    def login(self, id: str | None) -> list:
+        get_client_data = self._get_client_data(id)
+        get_client_addres = self._get_client_addrees(id)
+        get_client_acc = self._get_client_account(id)
+        get_person_data = self._get_person_data(id)
+        return [get_client_data, get_client_addres, get_client_acc, 
+                get_person_data]
+
+    def _get_client_data(self, id):
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT cpf, email, data_criacao
+            FROM Clientes
+            WHERE id = ?
+            """, (id,)
+        )
+        result = cursor.fetchone()
+        con.close()
+        return result
+
+    def _get_client_addrees(self, id):
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT cep
+            FROM Enderecos
+            WHERE id = ?
+            """, (id,)
+        )
+        result = cursor.fetchone()
+        con.close()
+        return result
+
+    def _get_client_account(self, id):
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT senha, saldo, credito, usuario_id
+            FROM Contas
+            WHERE id = ?
+            """, (id,)
+        )
+        result = cursor.fetchone()
+        con.close()
+        return result
+
+    def _get_person_data(self, id):
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT cpf, nome, data_nascimento
+            FROM Pessoas
+            WHERE id = ?
+            """, (id,)
+        )
+        result = cursor.fetchone()
+        con.close()
+        return result

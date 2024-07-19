@@ -2,25 +2,24 @@ import re
 from datetime import datetime
 
 class Pessoa:
-    def __init__(self, nome: str, documento: str,
-                  data_nascimento: str) -> None:
+    def __init__(self, nome: str, documento: str, data_nascimento: str) -> None:
         self.nome = nome
-        if Pessoa._validar_cpf(documento):
-            self.documento = documento
-        else:
+        self.documento = self._formatar_cpf(documento)
+        if not self._validar_cpf(self.documento):
             raise ValueError("CPF inválido")
-        if Pessoa._validar_data_nascimento(data_nascimento):
-            self.data_nascimento = data_nascimento
-        else:
+        if not self._validar_data_nascimento(data_nascimento):
             raise ValueError("Data de nascimento inválida")
+        self.data_nascimento = data_nascimento
 
     @staticmethod
-    def _validar_cpf(documento) -> bool:
-        cpf = documento
-        
+    def _formatar_cpf(documento: str) -> str:
         # Remover caracteres não numéricos
-        cpf = re.sub(r'\D', '', cpf)
+        return re.sub(r'\D', '', documento)
 
+    @staticmethod
+    def _validar_cpf(documento: str) -> bool:
+        cpf = re.sub(r'\D', '', documento)
+        
         # Verificar se o CPF tem 11 dígitos
         if len(cpf) != 11:
             return False

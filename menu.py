@@ -14,12 +14,15 @@ class Menu:
         while True:
             print("\nMenu Principal")
             print("1. Adicionar novo cliente")
-            print("2. Sair")
+            print("2. Login")
+            print("3. Sair")
             choice = input("Escolha uma opção: ")
 
             if choice == '1':
                 self.add_new_client()
             elif choice == '2':
+                self.login()
+            elif choice == '3':
                 sys.exit()
             else:
                 print("Opção inválida. Tente novamente.")
@@ -38,7 +41,7 @@ class Menu:
 
         pessoa = Pessoa(nome, cpf, data_nascimento)
         endereco = Endereco(cep)
-        conta = Conta(email, senha)
+        conta = Conta(email, senha, None, None)
         cliente = Cliente(pessoa, endereco, conta)
 
         ROOT_DIR = Path(__file__).parent
@@ -50,28 +53,17 @@ class Menu:
 
         print(f"Cliente {nome} adicionado com sucesso!")
 
-# from pessoa import Pessoa
-# from cliente import Cliente
-# from conta import Conta
-# from endereco import Endereco
-# from data import DatabaseManager
-# from pathlib import Path
+    def login(self):
+        print("\nLogin")
 
-# class Menu():
-#     def __init__(self) -> None:
-#         Menu.sla()
-    
-#     @staticmethod
-#     def sla():
-#         pessoa = Pessoa('Gustavo', '649.238.530-69', '23/06/2002')
-#         endereco = Endereco('05407002')
-#         conta = Conta('gustavo@gmail.com', '1234567#G')
-#         cliente = Cliente(pessoa, endereco, conta)
-#         ROOT_DIR = Path(__file__).parent
-#         DB_NAME = "db.sqlite3"
-#         DB_FILE = ROOT_DIR / DB_NAME
-#         data = DatabaseManager(DB_FILE)
-#         data.create_all_tables()
-#         print(cliente.conta.data_criacao)
-#         data.save_db(cliente, conta, endereco, pessoa)
-#         # print(data)
+        identifier = input("Digite seu email ou CPF: ")
+        senha = input("Digite sua senha: ")
+
+        ROOT_DIR = Path(__file__).parent
+        DB_NAME = "db.sqlite3"
+        DB_FILE = ROOT_DIR / DB_NAME
+        data = DatabaseManager(DB_FILE)
+        
+        client_id = data.get_client_id(identifier, senha)
+        login = data.login(client_id)
+        print(login)
