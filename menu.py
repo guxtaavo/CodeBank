@@ -22,6 +22,7 @@ class Menu:
                 self.add_new_client()
             elif choice == '2':
                 self.login()
+                sys.exit()
             elif choice == '3':
                 sys.exit()
             else:
@@ -41,7 +42,7 @@ class Menu:
 
         pessoa = Pessoa(nome, cpf, data_nascimento)
         endereco = Endereco(cep)
-        conta = Conta(email, senha, None, None)
+        conta = Conta(email, senha, None, None, None, None)
         cliente = Cliente(pessoa, endereco, conta)
 
         ROOT_DIR = Path(__file__).parent
@@ -66,4 +67,12 @@ class Menu:
         
         client_id = data.get_client_id(identifier, senha)
         login = data.login(client_id)
-        print(login)
+        endereco = Endereco(login[1][0])
+        pessoa = Pessoa(login[3][1], login[3][0], login[3][2])
+        conta = Conta(login[0][1], login[2][0], login[2][3], login[0][2],
+                      login[2][1], login[2][2])
+        cliente = Cliente(pessoa, endereco, conta)
+        self.menu_cliente(cliente)
+
+    def menu_cliente(self, cliente: Cliente):
+        print(f'--Opções menu cliente: {cliente}')
