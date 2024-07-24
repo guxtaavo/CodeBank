@@ -80,7 +80,6 @@ class DatabaseManager:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 senha TEXT NOT NULL,
                 saldo REAL NOT NULL,
-                credito REAL NOT NULL,
                 usuario_id INTEGER NOT NULL,
                 FOREIGN KEY (usuario_id) REFERENCES Clientes(id)
             )
@@ -144,13 +143,13 @@ class DatabaseManager:
         TABLE_NAME = 'Contas'
         sql = (
             f"INSERT INTO {TABLE_NAME} "
-            "(senha, saldo, credito, usuario_id) "
+            "(senha, saldo, usuario_id) "
             "VALUES "
-            "(?, ?, ?, ?)"
+            "(?, ?, ?)"
         )
         cursor.execute(
             sql,
-            [conta._senha, conta._saldo, conta._credito, conta.id_conta]
+            [conta._senha, conta._saldo, conta.id_conta]
         )
         con.commit()
         con.close()
@@ -246,7 +245,7 @@ class DatabaseManager:
         cursor = con.cursor()
         cursor.execute(
             """
-            SELECT senha, saldo, credito, usuario_id
+            SELECT senha, saldo, usuario_id
             FROM Contas
             WHERE id = ?
             """, (id,)

@@ -5,6 +5,7 @@ from endereco import Endereco
 from data import DatabaseManager
 from pathlib import Path
 import sys
+import os
 
 class Menu:
     def __init__(self):
@@ -42,7 +43,7 @@ class Menu:
 
         pessoa = Pessoa(nome, cpf, data_nascimento)
         endereco = Endereco(cep)
-        conta = Conta(email, senha, None, None, None, None)
+        conta = Conta(email, senha, None, None, None)
         cliente = Cliente(pessoa, endereco, conta)
 
         ROOT_DIR = Path(__file__).parent
@@ -57,7 +58,7 @@ class Menu:
     def login(self):
         print("\nLogin")
 
-        identifier = input("Digite seu email ou CPF: ")
+        identifier = input("Digite seu CPF: ")
         senha = input("Digite sua senha: ")
 
         ROOT_DIR = Path(__file__).parent
@@ -69,10 +70,21 @@ class Menu:
         login = data.login(client_id)
         endereco = Endereco(login[1][0])
         pessoa = Pessoa(login[3][1], login[3][0], login[3][2])
-        conta = Conta(login[0][1], login[2][0], login[2][3], login[0][2],
+        conta = Conta(login[0][1], login[2][0], login[0][2],
                       login[2][1], login[2][2])
         cliente = Cliente(pessoa, endereco, conta)
         self.menu_cliente(cliente)
 
     def menu_cliente(self, cliente: Cliente):
-        print(f'--Opções menu cliente: {cliente}')
+        os.system('cls')
+        print('-'*25)
+        print(f'Seja bem-vindx, {cliente.pessoa.nome}!')
+        print('-'*25)
+        print('Opções:')
+        print('1- Consultar saldo')
+        print('2- Consultar extrato')
+        print('3- Realizar transferência')
+        print('4- Realizar depósito (QRCode)')
+        print('5- Modificar a senha')
+        print('6- Sair')
+        choice = input("Escolha uma opção: ")

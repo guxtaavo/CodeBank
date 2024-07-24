@@ -4,10 +4,8 @@ from datetime import datetime
 
 class Conta:
     def __init__(self, email: str, senha: str, id_conta: int | None,
-                  data_criacao: str | None, saldo: float | None, 
-                  credito: float | None) -> None:
+                  data_criacao: str | None, saldo: float | None) -> None:
         self._saldo = saldo if saldo is not None else 0
-        self._credito = credito if credito is not None else 0
         if Conta._validar_email(email):
             self.email = email
         else:
@@ -96,9 +94,6 @@ class Conta:
 
     def get_saldo(self) -> float:
         return self._saldo
-    
-    def get_credito(self) -> float:
-        return self._credito
 
     def __str__(self) -> str:
         return f'{self.id_conta}'
