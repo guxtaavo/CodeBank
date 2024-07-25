@@ -60,31 +60,52 @@ class Menu:
 
         identifier = input("Digite seu CPF: ")
         senha = input("Digite sua senha: ")
+        identifier_formated = Pessoa._formatar_cpf(identifier)
 
         ROOT_DIR = Path(__file__).parent
         DB_NAME = "db.sqlite3"
         DB_FILE = ROOT_DIR / DB_NAME
         data = DatabaseManager(DB_FILE)
         
-        client_id = data.get_client_id(identifier, senha)
+        client_id = data.get_client_id(identifier_formated, senha)
         login = data.login(client_id)
         endereco = Endereco(login[1][0])
         pessoa = Pessoa(login[3][1], login[3][0], login[3][2])
-        conta = Conta(login[0][1], login[2][0], login[0][2],
-                      login[2][1], login[2][2])
+        conta = Conta(login[0][1], login[2][0], login[2][2],
+                      login[0][2], login[2][1])
         cliente = Cliente(pessoa, endereco, conta)
         self.menu_cliente(cliente)
 
     def menu_cliente(self, cliente: Cliente):
-        os.system('cls')
-        print('-'*25)
-        print(f'Seja bem-vindx, {cliente.pessoa.nome}!')
-        print('-'*25)
-        print('Opções:')
-        print('1- Consultar saldo')
-        print('2- Consultar extrato')
-        print('3- Realizar transferência')
-        print('4- Realizar depósito (QRCode)')
-        print('5- Modificar a senha')
-        print('6- Sair')
-        choice = input("Escolha uma opção: ")
+        while True:
+            os.system('cls')
+            print('-'*25)
+            print(f'Seja bem-vindx, {cliente.pessoa.nome}!')
+            print('-'*25)
+            print('Opções:')
+            print('1- Consultar saldo')
+            print('2- Consultar extrato')
+            print('3- Realizar transferência')
+            print('4- Realizar depósito (QRCode)')
+            print('5- Sair')
+            choice = input("Escolha uma opção: ")
+            if choice == '1':
+                os.system('cls')
+                print(f'O seu saldo é de: {cliente.conta.get_saldo()}R$')
+            elif choice == '2':
+                os.system('cls')
+                print('Lógica de puxar o extrato no DB.')
+            elif choice == '3':
+                os.system('cls')
+                cpf_destinatario = input('Digite o CPF da pessoa para realizar a transação')
+                valor_da_transacao = input('Digite o valor que você deseja transferir: ')
+                cliente.conta.transferir(valor_da_transacao, cpf_destinatario)
+            elif choice == '4':
+                os.system('cls')
+                print('Fazer a lógica do QRCode')
+            elif choice == '5':
+                os.system('cls')
+                print('Saindo do CodeBank, volte sempre!')
+                sys.exit()
+            else:
+                print('Opção inválida, tente novamente.')
