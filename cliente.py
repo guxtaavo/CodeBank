@@ -1,7 +1,6 @@
 from pessoa import Pessoa
 from endereco import Endereco
 from conta import Conta
-import re
 
 class Cliente():
     def __init__(self, pessoa: Pessoa, endereco: Endereco, conta: Conta) -> None:
@@ -12,10 +11,6 @@ class Cliente():
     def depositar(self, valor) -> None:
         if valor >= 0:
             self.conta.depositar(valor)
-
-    def transferir(self, valor, conta) -> None:
-        if self.conta.get_saldo() - valor >= 0:
-            self.conta.transferir(valor, conta)
 
     def __str__(self) -> str:
         return f'{self.pessoa} | {self.endereco} | {self.conta}'

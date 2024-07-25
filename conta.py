@@ -85,10 +85,6 @@ class Conta:
         except Exception as e:
             raise ValueError(f"Erro ao criar a conta: {e}")
 
-    def transferir(self, valor, conta) -> None:
-        conta += valor
-        self._saldo -= valor
-
     def depositar(self, valor) -> None:
         self._saldo += valor
 

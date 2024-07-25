@@ -189,7 +189,7 @@ class DatabaseManager:
         con.commit()
         con.close()
 
-    def get_client_id(self, identifier: str, password: str) -> str | None:
+    def get_client_id(self, identifier: str,) -> str | None:
         con = sqlite3.connect(self.path)
         cursor = con.cursor()
         cursor.execute(
@@ -203,6 +203,24 @@ class DatabaseManager:
         print(result)
         con.close()
         return result[0]
+    
+    def get_client_login(self, identifier: str, password: str) -> str | None:
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT c.id
+            FROM Clientes c
+            JOIN Contas co ON c.id = co.id
+            WHERE c.cpf = ? AND co.senha = ?
+            """, (identifier, password,)
+        )
+        result = cursor.fetchone()
+        con.close()
+        if result:
+            return result[0]  # Retorna o ID do cliente
+        else:
+            return None
     
     def login(self, id: str | None) -> list:
         get_client_data = self._get_client_data(id)
@@ -267,3 +285,42 @@ class DatabaseManager:
         result = cursor.fetchone()
         con.close()
         return result
+    
+    def update_client(self, cliente: Cliente):
+        # Atualizando dados do cliente
+        with sqlite3.connect(self.path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                UPDATE Clientes
+                SET email = ?
+                WHERE cpf = ?
+                """,
+                (cliente.conta.email, cliente.pessoa.documento)
+            )
+            conn.commit()
+            
+            # Atualizando dados da pessoa
+            cursor.execute(
+                """
+                UPDATE Pessoas
+                SET nome = ?, data_nascimento = ?
+                WHERE cpf = ?
+                """,
+                (cliente.pessoa.nome, cliente.pessoa.data_nascimento, cliente.pessoa.documento)
+            )
+            conn.commit()
+
+    def update_account(self, conta: Conta):
+        # Atualizando dados da conta
+        with sqlite3.connect(self.path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                UPDATE Contas
+                SET saldo = ?
+                WHERE usuario_id = ?
+                """,
+                (conta._saldo, conta.id_conta)
+            )
+            conn.commit()
