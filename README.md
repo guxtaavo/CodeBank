@@ -1,6 +1,6 @@
 # CodeBank
 
-Este projeto está em desenvolvimento com o objetivo de praticar os conceitos de Programação Orientada a Objetos (POO), uso de APIs e integração com um banco de dados SQLite3. O projeto simula um sistema bancário simples, onde é possível criar contas, realizar transações e consultar saldos.
+Este projeto tem como objetivo praticar os conceitos de Programação Orientada a Objetos (POO), uso de APIs e integração com um banco de dados SQLite3. O projeto simula um sistema bancário simples, onde é possível criar contas, realizar transações e consultar saldos e extratos.
 
 O objetivo principal deste projeto é explorar e aprender a desenvolver aplicações utilizando as capacidades oferecidas pelo SQLite3, APIs e os conceitos da POO.
 
@@ -16,7 +16,7 @@ O projeto oferece as seguintes funcionalidades principais:
 
 1. Implementação de classes e objetos para representar elementos do sistema bancário (contas, transações, etc.).
 2. Criação de contas bancárias com informações básicas.
-3. Realização de depósitos, saques e transferências entre contas.
+3. Realização de depósitos e transferências entre contas.
 4. Consulta de saldos e histórico de transações.
 
 ## Como Utilizar
