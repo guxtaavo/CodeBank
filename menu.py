@@ -81,7 +81,7 @@ class Menu:
             print('1- Consultar saldo')
             print('2- Consultar extrato')
             print('3- Realizar transferência')
-            print('4- Realizar depósito (QRCode)')
+            print('4- Realizar depósito')
             print('5- Sair')
             choice = input("Escolha uma opção: ")
             if choice == '1':
@@ -89,7 +89,7 @@ class Menu:
                 print(f'O seu saldo é de: R${cliente.conta.get_saldo():.2f}')
             elif choice == '2':
                 os.system('cls')
-                print('Lógica de puxar o extrato no DB.')
+                AcoesConta.get_extrato(cliente)
             elif choice == '3':
                 os.system('cls')
                 cpf_destinatario = input('Digite o CPF da pessoa para realizar a transação: ')

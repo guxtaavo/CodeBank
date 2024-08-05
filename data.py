@@ -4,6 +4,7 @@ from pessoa import Pessoa
 from endereco import Endereco
 from conta import Conta
 from pathlib import Path
+from datetime import datetime
 
 class DatabaseManager:
     def __init__(self, path: Path):
@@ -15,6 +16,7 @@ class DatabaseManager:
         self._create_table_address()
         self._create_table_client()
         self._create_table_account()
+        self._create_table_transactions()
 
     # Criar a tabela Pessoas
     def _create_table_person(self):
@@ -87,6 +89,25 @@ class DatabaseManager:
         )
         con.commit()
         con.close()
+
+    def _create_table_transactions(self):
+            con = sqlite3.connect(self.path)
+            cursor = con.cursor()
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS Transacoes (
+                    id_transacao INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_conta INTEGER,
+                    id_conta_destinatario INTEGER,
+                    tipo_transacao TEXT,
+                    valor REAL,
+                    data TEXT,
+                    FOREIGN KEY (id_conta) REFERENCES Contas(id)
+                )
+                """
+            )
+            con.commit()
+            con.close()
 
     # Método para resetar todo o banco de dados
     def _reset_database(self):
@@ -324,3 +345,38 @@ class DatabaseManager:
                 (conta._saldo, conta.id_conta)
             )
             conn.commit()
+
+    def update_transactions(self, id_remetente, id_destinatario, tipo, valor):
+        # Atualizando a tabela de transações
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        TABLE_NAME = 'Transacoes'
+        sql = (
+            f"INSERT INTO {TABLE_NAME} "
+            "(id_conta, id_conta_destinatario, tipo_transacao, valor, data) "
+            "VALUES "
+            "(?, ?, ?, ?, ?)"
+        )
+        cursor.execute(
+            sql,
+            [id_remetente, id_destinatario, tipo, valor, datetime.now().strftime('%Y-%m-%d %H:%M:%S')]
+        )
+        con.commit()
+        con.close()
+
+    def get_extrato(self, cliente):
+        id_conta = cliente.conta.id_conta
+
+        con = sqlite3.connect(self.path)
+        cursor = con.cursor()
+        cursor.execute(
+            """
+            SELECT id_transacao, id_conta, id_conta_destinatario,
+              tipo_transacao, valor, data
+            FROM Transacoes
+            WHERE id_conta = ?
+            """, (id_conta,)
+        )
+        result = cursor.fetchall() 
+        con.close()
+        return result

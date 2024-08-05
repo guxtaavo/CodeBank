@@ -31,5 +31,17 @@ class AcoesConta():
             destinatario.conta.depositar(valor)
             data.update_account(cliente.conta)
             data.update_account(destinatario.conta)
+            data.update_transactions(cliente.conta.id_conta, 
+                                     destinatario.conta.id_conta, 'Transferência',
+                                     valor)
         else:
             raise ValueError("Saldo insuficiente para transferência")
+        
+    @classmethod
+    def get_extrato(cls, cliente: Cliente):
+        ROOT_DIR = Path(__file__).parent
+        DB_NAME = "db.sqlite3"
+        DB_FILE = ROOT_DIR / DB_NAME
+        data = DatabaseManager(DB_FILE)
+        extrato = data.get_extrato(cliente)
+        print(extrato)
